@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .cont{
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap:20px;
+        text-align: center;
+    }
+    img{
+    width: 250px;
+    }
+    .cont>div{
+        background-color: teal;
+        border:1px solid red;
+        width:280px;
+        margin:50px;
+        border-radius:20px;
+        padding-top: 8px;
+    }
+    #ss{
+        display: block;
+        margin: auto;
+    }
+</style>
+<body>
+    <input type="text" id="ss" value="">
+        
+    <div class="cont">
+
+    </div>
+</body>
+</html>      
+  <script>
+    let cont=document.querySelector(".cont");
+    let api=`https://restcountries.com/v3.1/all`
+   //1st:-
+   let arr;
+let tt=document.getElementById("ss");
+  tt.addEventListener("input",()=>{
+       cont.innerHTML="";
+    let g=arr.filter((a,b)=>{
+         if(a.name.toUpperCase().includes(tt.value.toUpperCase())==true){
+            return true;
+         } else{
+            return false;
+         }
+    })
+    display(g);
+  })  
+   function data1(){
+    fetch(api)
+    .then((x)=>{
+        return x.json()
+    }).then((w)=>{ 
+        arr=w.map((a)=>{
+           return {
+            name:a.name.official,
+            population:a.population,
+            flag:a.flags.png,
+            continent:a.continents[0]
+           }
+         
+        })
+        display(arr)
+    }).catch((q)=>{
+        console.log(q);
+    })
+   } 
+   data1();
+
+        function display(data){
+             cont.innerHTML=null;
+            data.forEach(e => {
+                let div1=document.createElement("div");
+            let img=document.createElement("img");
+             img.setAttribute("src",e.flag)
+             let name=document.createElement("h2");
+             name.innerText=e.name;
+             let population=document.createElement("h2");
+             population=e.population;
+             let continent=document.createElement("p");
+             continent=e.continent;
+             div1.append(img,name,population,continent);
+             cont.append(div1);
+            });
+        }  
+  </script>
